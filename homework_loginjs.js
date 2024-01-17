@@ -15,12 +15,11 @@ const app = createApp({
     methods:{
 
         login() {
-        console.log('acc',this.ueserData.account);
-        console.log('acc',this.ueserData.psd);
+       
         const api = 'https://ec-course-api.hexschool.io/v2/admin/signin';
         axios.post(api, this.ueserData).then((response) => {
 
-            console.log('response',response);
+          
             const { token, expired } = response.data;
             //cookie 放token 跟 過期期限
             
@@ -36,9 +35,6 @@ const app = createApp({
         //初始化後第一個執行的方法
         //vue觸發getData ->this.getData
         //原生js 為 this.methods.getData
-
-        console.log('fdsfd');
-
     }
     }
     );

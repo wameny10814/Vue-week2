@@ -75,7 +75,9 @@ const app = createApp({
                 this.getdata();
             
             }).catch((err) => {
-                alert(err.response.data.message);
+                alert(err.data.message);
+                window.location = 'login.html';
+
             });
         },
         getdata(){
@@ -88,7 +90,7 @@ const app = createApp({
                 
 
             }).catch((err) => {
-                alert(err.response.data.message);
+                alert(err.data.message);
             });
 
         },
@@ -147,7 +149,7 @@ const app = createApp({
                     }
                 
                 }).catch((err) => {
-                    alert(err.response.data.message);
+                    alert(err.data.message);
                 });
 
             }else if (ModalType =='editModal'){
@@ -165,11 +167,10 @@ const app = createApp({
 
                     }else{
                         alert(response.data.message);
-
                     }
                 
                 }).catch((err) => {
-                    alert(err.response.data.message);
+                    alert(err.data.message);
                 });
 
             }
@@ -207,7 +208,7 @@ const app = createApp({
                 }
             
             }).catch((err) => {
-                alert(err.response.data.message);
+                alert(err.data.message);
             });
         },
 

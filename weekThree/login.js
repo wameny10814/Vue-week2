@@ -27,7 +27,8 @@ const app = createApp({
             document.cookie = `hexToken=${token};expires=${new Date(expired)}; path=/`;
             window.location = 'productions.html';
         }).catch((err) => {
-            alert(err.response.data.message);
+            console.log('err',err);
+            alert(err.data.message);
         });
         },
 
