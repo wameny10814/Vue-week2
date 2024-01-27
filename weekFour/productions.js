@@ -1,10 +1,5 @@
 import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
-
-let productModal;
-let delProductModal;
-let editModal;
-
 let addproductModal;
 let editModall;
 let deleteinfo;
@@ -362,10 +357,10 @@ app.component('editmodelcomponent', {
     },
     methods: {
         addmultiplePic() {
-            this.addPorduct.imagesUrl.push('');
+            this.theproduct.imagesUrl.push('');
         },
         deletemultiplePic() {
-            this.addPorduct.imagesUrl.pop();
+            this.theproduct.imagesUrl.pop();
         },
         emit(item){
             this.$emit('pusheditproduct', item);
