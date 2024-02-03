@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <VForm>
+            <VField name="email" rules="email|required">
+                <input type="text" v-model="email">
+                <ErrorMessage name="email"></ErrorMessage>
+            </VField>
+        </VForm>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/4.12.4/vee-validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/rules@4.12.4/dist/vee-validate-rules.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/i18n@4.12.4/dist/vee-validate-i18n.min.js"></script>
+
+    <script >
+       
+        console.log('表單驗證',VeeValidate);
+        Object.keys(VeeValidateRules).forEach(rule => {
+            if (rule !== 'default') {
+                VeeValidate.defineRule(rule, VeeValidateRules[rule]);
+            }
+        });
+
+      // 讀取外部的資源
+VeeValidateI18n.loadLocaleFromURL('./zh_TW.json');
+
+// Activate the locale
+VeeValidate.configure({
+  generateMessage: VeeValidateI18n.localize('zh_TW'),
+  validateOnInput: true, // 調整為：輸入文字時，就立即進行驗證
+});
+
+        const app = createApp({});
+        app.component('VForm', Form);
+        app.component('VField', Field);
+        app.component('ErrorMessage', ErrorMessage);
+
+        app.mount('#app');
+    </script>
+</html>
