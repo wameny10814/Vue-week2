@@ -1,6 +1,7 @@
 
 
 // console.log('表單驗證',VeeValidate);
+// console.log('vue loading',VueLoading)
 
 // // 載入VeeValidate 規則
 Object.keys(VeeValidateRules).forEach(rule => {
@@ -36,6 +37,9 @@ const app = Vue.createApp({
                 product_id:'',
                 qty:1,
             },
+            loadinStatus:false,
+            deleteLoadingStatus:false,
+            isLoading:true,
             form:{
                 user:{
                     name:'',
@@ -56,23 +60,15 @@ const app = Vue.createApp({
             return phoneNumber.test(value) ? true : '需要正確的電話號碼'
         },
         onSubmit(){
-            console.log('summit');
 
             const api = `${this.url.main}/api/${this.url.key}/order`;
 
 
             axios.post(api,{ data:  this.form }).then((res) => {
 
-                if(res.data.success == true){
 
                     alert(res.data.message);
 
-                    
-
-                }else{
-                    console.log('errrrr');
-                }
-
             }).catch((err) => {
                 alert(err.data.message);
                 console.log('err',err);
@@ -81,140 +77,85 @@ const app = Vue.createApp({
 
 
 
-        },
-        checklogined() {
-            const api = 'https://ec-course-api.hexschool.io/v2/api/user/check';
-            axios.post(api).then((res) => {
-
-                //check 成功後叫第一頁產品資料
-
-            
-
-            }).catch((err) => {
-                alert(err.data.message);
-                window.location = 'login.html';
-
-            });
         },
 
         getproducts(){
-
             const api = `${this.url.main}/api/${this.url.key}/products/all`;
 
-            console.log('123');
-
             axios.get(api).then((res) => {
-
-                console.log('res',res);
+                this.isLoading =false;
                 this.products = res.data.products;
-
-                //check 成功後叫第一頁產品資料
-                // this.getpagination();
-
             }).catch((err) => {
                 alert(err.data);
-
+                this.isLoading =false;
                 console.log('err',err);
-                // window.location = 'login.html';
 
             });
         },
 
         showdetail(item){
-            console.log('clickd',item);
             this.tempproduct = item;
             userProductModal.show();
+            this.loadinStatus = true;
 
         },
         getaddtocart_detail(item){
-            console.log('fdsfdf',item);
-            this.addtocart = item;
 
-            
+            this.addtocart = item;
             const api = `${this.url.main}/api/${this.url.key}/cart`;
 
-            console.log('123');
-
             axios.post(api,{ data:  this.addtocart }).then((res) => {
-
-                console.log('res',res);
-                // this.products = res.data.products;
-                // this.getpagination();
-                if(res.data.success == true){
                     userProductModal.hide();
                     //打成功清空
                     this.addtocart={};
                     alert(res.data.message);
+                    this.loadinStatus = false;
                     this.getcartlist();
-                    
-
-                }else{
-                    console.log('errrrr');
-                }
-
             }).catch((err) => {
                 alert(err.data);
                 console.log('err',err);
+                this.loadinStatus = false;
 
             });
         },
         additem(id){
+            this.loadinStatus = true;
             this.addtocart.product_id=id;
             this.addtocart.qty=1;
 
             const api = `${this.url.main}/api/${this.url.key}/cart`;
 
-            console.log('123');
-
             axios.post(api,{ data:  this.addtocart }).then((res) => {
-
-                console.log('res',res);
-                // this.products = res.data.products;
-                // this.getpagination();
-                if(res.data.success == true){
-                    userProductModal.hide();
-                    //打成功清空
-                    this.addtocart={};
-                    alert(res.data.message);
-                    this.getcartlist();
-                    
-
-                }else{
-                    console.log('errrrr');
-                }
+                this.loadinStatus = false;
+                userProductModal.hide();
+                //打成功清空
+                this.addtocart={};
+                alert(res.data.message);
+                this.getcartlist();
 
             }).catch((err) => {
                 alert(err.data);
                 console.log('err',err);
+                this.loadinStatus = false;
 
             });
 
         },
         getcartlist(){
-            console.log('getcartlist');
-
             const api = `${this.url.main}/api/${this.url.key}/cart`;
-
-    
 
             axios.get(api).then((res) => {
 
-                if(res.data.success == true){
-                    this.displayCartItem =res.data.data;
-                }
+                this.displayCartItem =res.data.data;
 
             }).catch((err) => {
                 alert(err.data);
-
                 console.log('err',err);
-                // window.location = 'login.html';
 
             });
         },
         updatecart(item){
-            console.log('updatecart',item);
-   
-            console.log('data',this.updatedata);
+            this.isLoading = true;
 
             const cart = {
                 product_id: item.product_id,
@@ -223,19 +164,12 @@ const app = Vue.createApp({
 
             const api = `${this.url.main}/api/${this.url.key}/cart/${item.id}`;
             axios.put(api,{ data:cart }).then((res) => {
-
-                console.log('res',res);
-                if(res.data.success == true){
                     this.getcartlist();
-                    
-
-                }else{
-                    console.log('errrrr');
-                }
-
+                    this.isLoading = false;
             }).catch((err) => {
                 alert(err.data);
                 console.log('err',err);
+                this.isLoading = false;
 
             });
 
@@ -244,46 +178,29 @@ const app = Vue.createApp({
         },
         deleteall(){
             const api = `${this.url.main}/api/${this.url.key}/carts`;
-
-    
-
             axios.delete(api).then((res) => {
-
-                console.log('rrrr',res);
-
-                if(res.data.success == true){
                 this.getcartlist();
-                }
-
             }).catch((err) => {
                 alert(err.data);
-
                 console.log('err',err);
-                // window.location = 'login.html';
+
 
             });
         },
         deletecertainitem(id){
-            console.log('deletecertainitem',id);
-
+            this.deleteLoadingStatus =true;
             const api = `${this.url.main}/api/${this.url.key}/cart/${id}`;
 
     
 
             axios.delete(api).then((res) => {
-
-                console.log('delete',res);
-
-                if(res.data.success == true){
-                 
                 this.getcartlist();
-                }
-
+                this.deleteLoadingStatus =false;
             }).catch((err) => {
                 alert(err.data);
-
+                this.deleteLoadingStatus =false;
                 console.log('err',err);
-                // window.location = 'login.html';
+
 
             });
         }
@@ -295,9 +212,8 @@ const app = Vue.createApp({
             keyboard: false
         });
 
-
-
         this.getproducts();
+        this.getcartlist();
 
     },
     
@@ -316,7 +232,6 @@ app.component('userProductModal',{
     methods:{
 
         emit(item) {
-            console.log('emit',item);
             this.addtocart.product_id= item.id;
             //this.$emit('內層資料名稱','內層資料內容')
             this.$emit('inner-add-to-cart',this.addtocart);
@@ -326,8 +241,6 @@ app.component('userProductModal',{
     mounted(){
         //可以在這邊寫props 的資料進去component裡面的data
         // this.tempdata = this.temp;
-
-
     },
     props:["temp"],
     template:'#userProductModal',
@@ -336,5 +249,8 @@ app.component('userProductModal',{
 app.component('VForm', VeeValidate.Form);
 app.component('VField', VeeValidate.Field);
 app.component('ErrorMessage', VeeValidate.ErrorMessage);
+
+app.use(VueLoading.LoadingPlugin);
+app.component('loading', VueLoading.Component)
 
 app.mount('#app');
