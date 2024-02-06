@@ -60,20 +60,27 @@ const app = Vue.createApp({
             return phoneNumber.test(value) ? true : '需要正確的電話號碼'
         },
         onSubmit(){
-
+            
             const api = `${this.url.main}/api/${this.url.key}/order`;
 
-
-            axios.post(api,{ data:  this.form }).then((res) => {
-
+            if(this.displayCartItem.carts.length !==0){
+                axios.post(api,{ data:  this.form }).then((res) => {
 
                     alert(res.data.message);
+                    this.getcartlist();
 
-            }).catch((err) => {
-                alert(err.data.message);
-                console.log('err',err);
+                }).catch((err) => {
+                    alert(err.data.message);
+                    console.log('err',err);
 
-            });
+                });
+
+            }else{
+                alert('購物車為空')
+            }
+
+
+        
 
 
 
