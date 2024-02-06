@@ -62,12 +62,15 @@ const app = Vue.createApp({
         onSubmit(){
             
             const api = `${this.url.main}/api/${this.url.key}/order`;
+            const orderform = this.form;
 
             if(this.displayCartItem.carts.length !==0){
-                axios.post(api,{ data:  this.form }).then((res) => {
+                axios.post(api,{ data:  orderform }).then((res) => {
 
                     alert(res.data.message);
                     this.getcartlist();
+                    //抓取form 表單元素淨空資料
+                    this.$refs.form.resetForm();
 
                 }).catch((err) => {
                     alert(err.data.message);
@@ -93,7 +96,7 @@ const app = Vue.createApp({
                 this.isLoading =false;
                 this.products = res.data.products;
             }).catch((err) => {
-                alert(err.data);
+                alert(err.data.message);
                 this.isLoading =false;
                 console.log('err',err);
 
@@ -119,7 +122,7 @@ const app = Vue.createApp({
                     this.loadinStatus = false;
                     this.getcartlist();
             }).catch((err) => {
-                alert(err.data);
+                alert(err.data.message);
                 console.log('err',err);
                 this.loadinStatus = false;
 
@@ -141,7 +144,7 @@ const app = Vue.createApp({
                 this.getcartlist();
 
             }).catch((err) => {
-                alert(err.data);
+                alert(err.data.message);
                 console.log('err',err);
                 this.loadinStatus = false;
 
@@ -156,7 +159,7 @@ const app = Vue.createApp({
                 this.displayCartItem =res.data.data;
 
             }).catch((err) => {
-                alert(err.data);
+                alert(err.data.message);
                 console.log('err',err);
 
             });
@@ -174,7 +177,7 @@ const app = Vue.createApp({
                     this.getcartlist();
                     this.isLoading = false;
             }).catch((err) => {
-                alert(err.data);
+                alert(err.data.message);
                 console.log('err',err);
                 this.isLoading = false;
 
@@ -188,7 +191,7 @@ const app = Vue.createApp({
             axios.delete(api).then((res) => {
                 this.getcartlist();
             }).catch((err) => {
-                alert(err.data);
+                alert(err.data.message);
                 console.log('err',err);
 
 
@@ -204,7 +207,7 @@ const app = Vue.createApp({
                 this.getcartlist();
                 this.deleteLoadingStatus =false;
             }).catch((err) => {
-                alert(err.data);
+                alert(err.data.message);
                 this.deleteLoadingStatus =false;
                 console.log('err',err);
 
